@@ -1,121 +1,263 @@
-/*  RESET   */
+/* Fontes: Julius Sans One e Jost (Light 300) carregadas via Google Fonts no index.html */
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+:root {
+  --font-julius: 'Julius Sans One', sans-serif;
+  --font-jost: 'Jost', sans-serif;
+
+  --cor-dourado: #BA9568;
+  --cor-branco: #FFFFFF;
+  --cor-branco-principal: #F7F7F7;
+  --cor-fundo-escuro: #333333;
+
+  --largura-design: 1440px;
 }
 
-
-/*  ESTILOS GERAIS  */
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 body {
-    font-family: "Julius Sans One", sans-serif;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
+img {
+  display: block;
+}
 
-/*  HERO    */
-
+/* ===== HERO (1440 × 1826: duas dobras de 913; no Figma, frame de 1440 × 1937) ===== */
 .hero {
-    height: 100vh;
-
-    background-image: url("imagens/hero.jpg");
-    background-size: cover;
-    background-position: center 45%;
-    background-repeat: no-repeat;
-
-    position: relative;
-    overflow: hidden;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  background-color: var(--cor-branco);
 }
 
-
-/* Overlay horizontal */
-
-.hero::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-
-    background:
-        linear-gradient(
-            to right,
-            rgba(51, 51, 51, 0.96) 0%,
-            rgba(51, 51, 51, 0.78) 38%,
-            rgba(51, 51, 51, 0.22) 62%,
-            rgba(51, 51, 51, 0.08) 100%
-        ),
-        linear-gradient(
-            to bottom,
-            rgba(51, 51, 51, 0.62) 0%,
-            rgba(51, 51, 51, 0.05) 18%,
-            rgba(51, 51, 51, 0.05) 70%,
-            rgba(51, 51, 51, 0.94) 100%
-        );
-
-    mix-blend-mode: multiply;
+/* ----- 1ª dobra (1440 × 913, mesmas dimensões da 2ª dobra) -----
+   Fica fixa (sticky) no topo enquanto a 2ª dobra sobe e a cobre. */
+.hero-dobra {
+  position: sticky;
+  top: 0;
+  z-index: 0;
+  height: 913px;
+  overflow: hidden;
 }
 
-
-/*  HEADER   */
-
-.header {
-    position: absolute;
-    top: 50px;
-    left: 51px;
-    z-index: 2;
+/* Imagem cortada para 1440 × 913 sem distorção.
+   object-position 66.5% mantém o anel logo abaixo do título,
+   como no enquadramento original do Figma. */
+.hero-dobra__fundo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 66.5%;
+  mix-blend-mode: darken;
 }
 
-.menu-logo {
-    display: flex;
-    align-items: center;
-    gap: 16px;
+.hero-dobra__overlay-vertical,
+.hero-dobra__overlay-lateral {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  mix-blend-mode: multiply;
 }
 
-.logo {
-    width: 150px;
-    height: auto;
+.hero-dobra__overlay-lateral {
+  background-image: linear-gradient(
+    90deg,
+    rgba(51, 51, 51, 0.92) 0%,
+    rgba(51, 51, 51, 0.70) 38%,
+    rgba(51, 51, 51, 0.15) 62%,
+    rgba(51, 51, 51, 0.05) 100%
+  );
 }
 
-
-/* Ícone do menu */
-
-.menu-icone {
-    width: 28px;
-    height: 22px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+/* Cabeçalho: menu em x 51 / logo em x 99, topo em y 50 */
+.cabecalho {
+  position: absolute;
+  top: 50px;
+  left: 51px;
+  display: flex;
+  align-items: center;
+  gap: 28.4px;
+  height: 30px;
 }
 
-.menu-icone span {
-    height: 2px;
-    background-color: #BA9568;
+.cabecalho__menu {
+  display: flex;
+  flex-direction: column;
+  gap: 4.375px;
+  width: 19.6px;
 }
 
-.menu-icone span:nth-child(1),
-.menu-icone span:nth-child(3) {
-    width: 28px; 
+.cabecalho__menu span {
+  display: block;
+  width: 19.6px;
+  height: 2.917px;
+  background-color: var(--cor-dourado);
 }
 
-.menu-icone span:nth-child(2) {
-    width: 28px;
+/* Logo 108 × 30 com o mesmo recorte da imagem no Figma */
+.cabecalho__logo {
+  position: relative;
+  width: 108px;
+  height: 30px;
+  overflow: hidden;
 }
 
+.cabecalho__logo img {
+  position: absolute;
+  top: -29.41%;
+  left: -3.28%;
+  width: 106.56%;
+  height: 152.94%;
+  max-width: none;
+}
 
-/*  TEXTO DO HERO   */
+/* Título centralizado na dobra: 354 × 39 (centro vertical em y 456,5) */
+.hero-dobra__titulo {
+  position: absolute;
+  top: 437px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-julius);
+  font-weight: 400;
+  font-size: 36px;
+  line-height: normal;
+  color: var(--cor-branco);
+  white-space: nowrap;
+}
 
-.hero h1 {
-    position: relative;
-    z-index: 1;
+/* ----- 2ª dobra: Sobre Nós (1440 × 913) ----- */
+/* Fundo opaco e acima da 1ª dobra, para cobri-la ao rolar */
+.sobre {
+  position: relative;
+  z-index: 1;
+  background-color: var(--cor-branco-principal);
+}
 
-    font-size: 46px;
-    font-weight: 400;
-    letter-spacing: 2px;
+.sobre__container {
+  position: relative;
+  max-width: var(--largura-design);
+  height: 913px;
+  margin: 0 auto;
+  overflow: hidden;
+}
 
-    color: #F7F7F7;
+/* Coluna de texto: x 102, largura 495 */
+.sobre__texto {
+  position: absolute;
+  top: 132px;
+  left: 102px;
+  width: 495px;
+}
+
+.sobre__titulo {
+  width: 569px;
+  font-family: var(--font-julius);
+  font-weight: 400;
+  font-size: 36px;
+  line-height: 1.25;
+  letter-spacing: 0.36px;
+  color: var(--cor-fundo-escuro);
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 40px;
+}
+
+.eyebrow__linha {
+  display: block;
+  width: 48px;
+  height: 1px;
+  background-color: var(--cor-dourado);
+}
+
+.eyebrow__texto {
+  font-family: var(--font-julius);
+  font-size: 16px;
+  line-height: 17px;
+  color: var(--cor-fundo-escuro);
+  white-space: nowrap;
+}
+
+.sobre__paragrafo {
+  margin-top: 16px;
+  font-family: var(--font-jost);
+  font-weight: 300;
+  font-size: 17px;
+  line-height: 1.75;
+  color: var(--cor-fundo-escuro);
+}
+
+/* Frases centralizadas na coluna de texto (228px de largura) */
+.sobre__frases {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 228px;
+  margin: 48px auto 0;
+}
+
+.sobre__frase {
+  font-family: var(--font-julius);
+  font-size: 12px;
+  line-height: 13px;
+  letter-spacing: 1.2px;
+  color: var(--cor-fundo-escuro);
+  white-space: nowrap;
+}
+
+.sobre__sublinhado {
+  display: block;
+  width: 228px;
+  height: 1px;
+  margin: 3px 0 4px;
+  background-color: var(--cor-dourado);
+}
+
+/* Foto principal: 600 × 560 em x 740 / y 128 */
+.sobre__foto-principal {
+  position: absolute;
+  top: 128px;
+  left: 740px;
+  width: 600px;
+  height: 560px;
+  object-fit: cover;
+}
+
+/* Foto de detalhe: 201 × 248, sobreposta à principal.
+   A imagem ocupa a caixa inteira (alinhada ao topo) e a borda branca
+   de 10px é desenhada por cima dela, para dentro.
+   Difere do Figma, onde a borda fica por fora (ver CLAUDE.md). */
+.sobre__foto-detalhe {
+  position: absolute;
+  top: 530px;
+  left: 671px;
+  width: 201px;
+  height: 248px;
+  overflow: hidden;
+}
+
+.sobre__foto-detalhe img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+.sobre__foto-detalhe::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 10px solid var(--cor-branco);
 }

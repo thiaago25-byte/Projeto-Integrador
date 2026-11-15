@@ -1,52 +1,71 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Single Diamonds</title>
 
-    <title>Single Diamonds</title>
-
-    <!-- Fonte -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Julius+Sans+One&display=swap"
-        rel="stylesheet"
-    >
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300&family=Julius+Sans+One&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-    <section class="hero">
+<div class="hero">
 
-        <header class="header">
+  <!-- 1ª dobra -->
+  <section class="hero-dobra">
+    <img src="IMG/backhround%20home%20SingleD.jpg" class="hero-dobra__fundo" alt="" />
+    <img src="IMG/overlay%20vertical%20SingleD.svg" class="hero-dobra__overlay-vertical" alt="" />
+    <div class="hero-dobra__overlay-lateral"></div>
 
-            <div class="menu-logo">
+    <header class="cabecalho">
+      <div class="cabecalho__menu" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="cabecalho__logo">
+        <img src="IMG/logo-SingleD.png" alt="Single Diamonds" />
+      </div>
+    </header>
 
-                <div class="menu-icone">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
+    <h1 class="hero-dobra__titulo">SINGLE DIAMONDS</h1>
+  </section>
 
-                <img
-                    class="logo"
-                    src="imagens/logo.png"
-                    alt="Logo Single Diamonds"
-                >
+  <!-- 2ª dobra -->
+  <section class="sobre">
+    <div class="sobre__container">
 
-            </div>
+      <div class="sobre__texto">
+        <h2 class="sobre__titulo">Três gerações dedicadas<br>aos diamantes.</h2>
 
-        </header>
+        <div class="eyebrow">
+          <span class="eyebrow__linha"></span>
+          <p class="eyebrow__texto">QUEM SOMOS</p>
+        </div>
 
-        <h1>Single Diamonds</h1>
+        <p class="sobre__paragrafo">A história da Single Diamonds começa há gerações, com José Pinheiro, meu avô, que dedicou sua vida ao universo dos diamantes. Com olhar preciso e mãos experientes, ele foi referência na identificação e valorização de pedras naturais — deixando um legado de conhecimento e respeito por tudo o que é autêntico.</p>
+        <p class="sobre__paragrafo">Inspirado por essa herança, e com o incentivo do meu pai, Joel Pinheiro, iniciamos juntos uma nova etapa: a criação da nossa própria mineração, com foco em diamantes naturais e coloridos extraídos em nossa região.</p>
+        <p class="sobre__paragrafo">Assim nasceu a Single Diamonds, uma marca de luxo que une tradição familiar, excelência técnica e curadoria rigorosa. Cada joia que criamos carrega não apenas beleza, mas também história, origem e propósito.</p>
 
-    </section>
+        <div class="sobre__frases">
+          <p class="sobre__frase">LUXO COM ESSÊNCIA NATURAL</p>
+          <span class="sobre__sublinhado"></span>
+          <p class="sobre__frase">HERANÇA COM BRILHO ETERNO</p>
+        </div>
+      </div>
+
+      <img src="IMG/analise%20diamantes.jpg" class="sobre__foto-principal" alt="Isaque analisando um diamante com lupa e pinça" />
+      <div class="sobre__foto-detalhe">
+        <img src="IMG/alta%20joalheria%20background%20SingleD.png" alt="Anel de alta joalheria com diamante amarelo" />
+      </div>
+
+    </div>
+  </section>
+
+</div>
 
 </body>
-
 </html>
