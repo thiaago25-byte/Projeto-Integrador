@@ -132,6 +132,11 @@ img {
 
 /* ===== Sobre ===== */
 
+/* Bloco com as três seções "Sobre": referência para empilhá-las na transição (animacao.js). */
+.sequencia-sobre {
+  position: relative;
+}
+
 /* Fundo opaco e acima da hero, para cobri-la ao rolar. */
 .sobre {
   position: relative;
@@ -223,11 +228,11 @@ img {
   object-fit: cover;
 }
 
-/* 1ª seção: a borda branca é desenhada por cima da foto, para dentro.
-   Difere do Figma, onde a borda fica por fora (ver CLAUDE.md).
-   As seções 2 e 3 sobrescrevem a moldura no fim do arquivo. */
+/* A borda branca é desenhada por cima da foto, para dentro.
+   Difere do Figma, onde a borda fica por fora (ver CLAUDE.md). */
 .foto-detalhe {
   position: absolute;
+  z-index: 1; /* sempre acima das fotos principais, inclusive durante a troca de seções */
   top: 530px;
   left: 671px;
   width: 201px;
@@ -248,55 +253,10 @@ img {
   border: 10px solid var(--color-white);
 }
 
-/* ===== Sobre Nós 2 e 3: mesmo layout; mudam posições, recortes e a moldura da foto de detalhe ===== */
-
-/* Comum às duas: foto de detalhe de 208 × 248, com a moldura de 10px por dentro, na cor do fundo. */
-.sobre-2 .foto-detalhe,
-.sobre-3 .foto-detalhe {
-  left: 652px;
-  width: 208px;
-  padding: 10px;
-  background-color: var(--color-off-white);
-}
-
-.sobre-2 .foto-detalhe::after,
-.sobre-3 .foto-detalhe::after {
-  content: none;
-}
-
-/* Sobre Nós 2 */
-.sobre-2 .foto-principal {
-  top: 114px;
-}
-
-.sobre-2 .foto-detalhe {
-  top: 499px;
-}
-
-.sobre-2 .foto-detalhe img {
-  object-position: center;
-}
-
-/* Sobre Nós 3 */
-.sobre-3 .texto-sobre {
-  top: 115px;
-}
-
-.sobre-3 .titulo-sobre {
-  width: 579px;
-}
-
-.sobre-3 .frases-sobre {
-  margin-top: 82px; /* frases em y 782, 17px abaixo das outras telas */
-}
+/* ===== Sobre Nós 2 e 3: mesmas posições da 1ª; só mudam os recortes das fotos ===== */
 
 .sobre-3 .foto-principal {
-  top: 97px;
   object-position: center 37%; /* enquadramento mais próximo do Figma, sem esticar a foto */
-}
-
-.sobre-3 .foto-detalhe {
-  top: 482px;
 }
 
 .sobre-3 .foto-detalhe img {
