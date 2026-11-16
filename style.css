@@ -35,9 +35,9 @@ img {
   overflow: hidden;
 }
 
-.hero__background,
-.hero__overlay-vertical,
-.hero__overlay-horizontal {
+.fundo-hero,
+.gradiente-vertical,
+.gradiente-lateral {
   position: absolute;
   top: 0;
   left: 0;
@@ -45,18 +45,18 @@ img {
   height: 100%;
 }
 
-.hero__background {
+.fundo-hero {
   object-fit: cover;
   object-position: center 66.5%; /* mantém o anel logo abaixo do título */
   mix-blend-mode: darken;
 }
 
-.hero__overlay-vertical,
-.hero__overlay-horizontal {
+.gradiente-vertical,
+.gradiente-lateral {
   mix-blend-mode: multiply;
 }
 
-.hero__overlay-horizontal {
+.gradiente-lateral {
   background-image: linear-gradient(
     90deg,
     rgba(51, 51, 51, 0.92) 0%,
@@ -69,7 +69,7 @@ img {
 /* ===== Cabeçalho ===== */
 
 /* Menu em x 51 e logo em x 99, topo em y 50 (margem diferente da do conteúdo, como no Figma). */
-.site-header {
+.cabecalho {
   position: absolute;
   top: 50px;
   left: 51px;
@@ -78,27 +78,27 @@ img {
   gap: 28.4px;
 }
 
-.site-header__menu {
+.menu {
   display: flex;
   flex-direction: column;
   gap: 4.375px;
 }
 
-.site-header__menu span {
+.menu span {
   width: 19.6px;
   height: 2.917px;
   background-color: var(--color-gold);
 }
 
 /* O logo é ampliado e recortado pela caixa para esconder as margens da imagem. */
-.site-header__logo {
+.logo {
   position: relative;
   width: 108px;
   height: 30px;
   overflow: hidden;
 }
 
-.site-header__logo img {
+.logo img {
   position: absolute;
   top: -29.41%;
   left: -3.28%;
@@ -107,7 +107,7 @@ img {
 }
 
 /* Centralizado na dobra (centro vertical em y 456,5). */
-.hero__title {
+.titulo-hero {
   position: absolute;
   top: 437px;
   left: 50%;
@@ -122,13 +122,13 @@ img {
 /* ===== Sobre ===== */
 
 /* Fundo opaco e acima da hero, para cobri-la ao rolar. */
-.about {
+.sobre {
   position: relative;
   z-index: 1;
   background-color: var(--color-off-white);
 }
 
-.about__container {
+.container-sobre {
   position: relative;
   max-width: 1440px;
   height: 913px;
@@ -136,14 +136,14 @@ img {
   overflow: hidden;
 }
 
-.about__content {
+.texto-sobre {
   position: absolute;
   top: 132px;
   left: 102px;
   width: 495px;
 }
 
-.about__title {
+.titulo-sobre {
   width: 569px;
   font-family: var(--font-heading);
   font-weight: 400;
@@ -152,26 +152,26 @@ img {
   letter-spacing: 0.36px;
 }
 
-.section-label {
+.rotulo {
   display: flex;
   align-items: center;
   gap: 16px;
   margin-top: 40px;
 }
 
-.section-label__line {
+.linha-dourada {
   width: 48px;
   height: 1px;
   background-color: var(--color-gold);
 }
 
-.section-label__text {
+.texto-rotulo {
   font-family: var(--font-heading);
   font-size: 16px;
   line-height: 17px;
 }
 
-.about__text {
+.paragrafo-sobre {
   margin-top: 16px;
   font-family: var(--font-body);
   font-weight: 300;
@@ -180,7 +180,7 @@ img {
 }
 
 /* Frases centralizadas na coluna de texto. */
-.about__taglines {
+.frases-sobre {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -188,7 +188,7 @@ img {
   margin: 48px auto 0;
 }
 
-.about__tagline {
+.frase-sobre {
   font-family: var(--font-heading);
   font-size: 12px;
   line-height: 13px;
@@ -196,14 +196,14 @@ img {
   white-space: nowrap;
 }
 
-.about__divider {
+.divisor-dourado {
   width: 100%;
   height: 1px;
   margin: 3px 0 4px;
   background-color: var(--color-gold);
 }
 
-.about__photo-main {
+.foto-principal {
   position: absolute;
   top: 128px;
   left: 740px;
@@ -214,7 +214,7 @@ img {
 
 /* A borda branca é desenhada por cima da foto, para dentro.
    Difere do Figma, onde a borda fica por fora (ver CLAUDE.md). */
-.about__photo-detail {
+.foto-detalhe {
   position: absolute;
   top: 530px;
   left: 671px;
@@ -222,14 +222,14 @@ img {
   height: 248px;
 }
 
-.about__photo-detail img {
+.foto-detalhe img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: top;
 }
 
-.about__photo-detail::after {
+.foto-detalhe::after {
   content: "";
   position: absolute;
   inset: 0;
