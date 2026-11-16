@@ -1,4 +1,3 @@
-/* Fontes carregadas via Google Fonts no index.html. */
 :root {
   --font-heading: 'Julius Sans One', sans-serif;
   --font-body: 'Jost', sans-serif;
@@ -24,12 +23,67 @@ img {
   display: block;
 }
 
+/* ===== Cabeçalho ===== */
+
+/* Fica fixo na tela, por cima de todas as seções. */
+.cabecalho {
+  position: fixed;
+  top: 50px;
+  left: 51px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 28.4px;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 5px; /* valores inteiros: com 2,917px o traço do meio ficava mais fino */
+}
+
+.menu span {
+  width: 19.6px;
+  height: 3px;
+  background-color: var(--color-gold);
+  transition: background-color 0.4s ease;
+}
+
+.cabecalho.claro .menu span {
+  background-color: #000;
+}
+
+/* A caixa recorta as margens da imagem da logo. */
+.logo {
+  position: relative;
+  width: 108px;
+  height: 30px;
+  overflow: hidden;
+}
+
+/* Duas logos uma sobre a outra: a preta aparece quando o JS liga .claro (fundo claro). */
+.logo img {
+  position: absolute;
+  top: -29.41%;
+  left: -3.28%;
+  width: 106.56%;
+  height: 152.94%;
+  transition: opacity 0.4s ease;
+}
+
+.logo-preta,
+.cabecalho.claro .logo img {
+  opacity: 0;
+}
+
+.cabecalho.claro .logo .logo-preta {
+  opacity: 1;
+}
+
 /* ===== Hero ===== */
 
-/* 1ª dobra: 913px de altura, igual à 2ª (no Figma tem 1024).
-   Fica fixa no topo enquanto a seção "Sobre" sobe e a cobre.
-   O fundo preto escurece o conteúdo quando ele perde opacidade (animacao.js),
-   como na referência do Codrops. */
+/* 1ª dobra. Fica parada no topo enquanto o "Sobre" sobe por cima;
+   o fundo preto aparece quando ela escurece. */
 .hero {
   position: sticky;
   top: 0;
@@ -38,8 +92,7 @@ img {
   background-color: #000;
 }
 
-/* Parte animada da hero. O isolation impede que os modos de mesclagem
-   da foto e dos gradientes se misturem com o fundo preto da .hero. */
+/* isolation: a mesclagem da foto e dos gradientes não se mistura com o preto da .hero. */
 .conteudo-hero {
   position: absolute;
   inset: 0;
@@ -77,46 +130,6 @@ img {
   );
 }
 
-/* ===== Cabeçalho ===== */
-
-/* Menu em x 51 e logo em x 99, topo em y 50 (margem diferente da do conteúdo, como no Figma). */
-.cabecalho {
-  position: absolute;
-  top: 50px;
-  left: 51px;
-  display: flex;
-  align-items: center;
-  gap: 28.4px;
-}
-
-.menu {
-  display: flex;
-  flex-direction: column;
-  gap: 4.375px;
-}
-
-.menu span {
-  width: 19.6px;
-  height: 2.917px;
-  background-color: var(--color-gold);
-}
-
-/* O logo é ampliado e recortado pela caixa para esconder as margens da imagem. */
-.logo {
-  position: relative;
-  width: 108px;
-  height: 30px;
-  overflow: hidden;
-}
-
-.logo img {
-  position: absolute;
-  top: -29.41%;
-  left: -3.28%;
-  width: 106.56%;
-  height: 152.94%;
-}
-
 /* Centralizado na dobra (centro vertical em y 456,5). */
 .titulo-hero {
   position: absolute;
@@ -132,15 +145,14 @@ img {
 
 /* ===== Sobre ===== */
 
-/* Bloco com as três seções "Sobre": referência para empilhá-las na transição (animacao.js). */
+/* Bloco com as três seções "Sobre", usado na transição (animacao.js). */
 .sequencia-sobre {
   position: relative;
 }
 
-/* Fundo opaco e acima da hero, para cobri-la ao rolar. */
+/* Fundo opaco para cobrir a hero. */
 .sobre {
   position: relative;
-  z-index: 1;
   background-color: var(--color-off-white);
 }
 
@@ -195,28 +207,48 @@ img {
   line-height: 1.75;
 }
 
-/* Frases centralizadas na coluna de texto. */
-.frases-sobre {
+/* Botão para o Portfólio (hover "button--pan" do Codrops, invertido):
+   o dourado sobe e o texto clareia. */
+.cta-sobre {
+  position: relative;
+  isolation: isolate; /* mantém o preenchimento (::before) atrás do texto */
+  overflow: hidden;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  width: 228px;
+  gap: 10px;
+  width: fit-content;
   margin: 48px auto 0;
-}
-
-.frase-sobre {
+  padding: 14px 28px;
+  border: 1px solid var(--color-gold);
   font-family: var(--font-heading);
   font-size: 12px;
   line-height: 13px;
   letter-spacing: 1.2px;
+  color: var(--color-dark);
+  text-decoration: none;
   white-space: nowrap;
+  pointer-events: auto; /* continua clicável com as seções empilhadas da animação */
+  transition: color 0.3s cubic-bezier(0.7, 0, 0.2, 1);
 }
 
-.divisor-dourado {
-  width: 100%;
-  height: 1px;
-  margin: 3px 0 4px;
+.cta-sobre::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   background-color: var(--color-gold);
+  transform: translateY(100%); /* escondido logo abaixo do botão */
+  transition: transform 0.3s cubic-bezier(0.7, 0, 0.2, 1);
+}
+
+.cta-sobre:hover,
+.cta-sobre:focus-visible {
+  color: var(--color-white);
+}
+
+.cta-sobre:hover::before,
+.cta-sobre:focus-visible::before {
+  transform: translateY(0);
 }
 
 .foto-principal {
@@ -228,8 +260,7 @@ img {
   object-fit: cover;
 }
 
-/* A borda branca é desenhada por cima da foto, para dentro.
-   Difere do Figma, onde a borda fica por fora (ver CLAUDE.md). */
+/* Moldura branca de 10px desenhada por dentro da foto. */
 .foto-detalhe {
   position: absolute;
   z-index: 1; /* sempre acima das fotos principais, inclusive durante a troca de seções */
