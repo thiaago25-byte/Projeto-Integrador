@@ -9,27 +9,34 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300&family=Julius+Sans+One&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/CustomEase.min.js" defer></script>
+  <script src="animacao.js" defer></script>
 </head>
 <body>
 
   <!-- 1ª dobra -->
   <section class="hero">
-    <img src="IMG/backhround%20home%20SingleD.jpg" class="fundo-hero" alt="">
-    <img src="IMG/overlay%20vertical%20SingleD.svg" class="gradiente-vertical" alt="">
-    <div class="gradiente-lateral"></div>
+    <div class="conteudo-hero">
+      <img src="IMG/backhround%20home%20SingleD.jpg" class="fundo-hero" alt="">
+      <img src="IMG/overlay%20vertical%20SingleD.svg" class="gradiente-vertical" alt="">
+      <div class="gradiente-lateral"></div>
 
-    <header class="cabecalho">
-      <div class="menu" aria-hidden="true">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-      <div class="logo">
-        <img src="IMG/logo-SingleD.png" alt="Single Diamonds">
-      </div>
-    </header>
+      <header class="cabecalho">
+        <div class="menu" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="logo">
+          <img src="IMG/logo-SingleD.png" alt="Single Diamonds">
+        </div>
+      </header>
 
-    <h1 class="titulo-hero">SINGLE DIAMONDS</h1>
+      <h1 class="titulo-hero">SINGLE DIAMONDS</h1>
+    </div>
   </section>
 
   <!-- 2ª dobra: Sobre Nós -->
@@ -58,6 +65,68 @@
       <img src="IMG/analise%20diamantes.jpg" class="foto-principal" alt="Isaque analisando um diamante com lupa e pinça">
       <div class="foto-detalhe">
         <img src="IMG/alta%20joalheria%20background%20SingleD.png" alt="Anel de alta joalheria com diamante amarelo">
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 3ª dobra: Sobre Nós 2 -->
+  <section class="sobre sobre-2">
+    <div class="container-sobre">
+
+      <div class="texto-sobre">
+        <h2 class="titulo-sobre">CADA JOIA COMEÇA COM UMA HISTÓRIA</h2>
+
+        <div class="rotulo">
+          <span class="linha-dourada"></span>
+          <p class="texto-rotulo">Como fazemos?</p>
+        </div>
+
+        <p class="paragrafo-sobre">Compreendemos os desejos, estilo de vida e preferências do cliente, traduzindo isso em informações objetivas para o projeto.<br>Por que isso importa? Um bom briefing é a base para um design assertivo. Na joalheria de alto padrão, captar emoções e intenções do cliente é tão importante quanto entender o que ele quer visualmente.</p>
+        <p class="paragrafo-sobre">Ao criar peças únicas e elegantes, equilibrando inovação estética com viabilidade técnica e atratividade de mercado, o design criado precisa ser encantador, mas também exequível e alinhado com o posicionamento da marca e o valor percebido pelo cliente.</p>
+        <p class="paragrafo-sobre">Domínio técnico em ourivesaria, cravação e acabamento fino, garante qualidade, simetria e segurança da peça final.<br>A excelência no acabamento e na montagem das joias influencia diretamente a percepção de luxo e o valor da peça.</p>
+
+        <div class="frases-sobre">
+          <p class="frase-sobre">LUXO COM ESSÊNCIA NATURAL</p>
+          <span class="divisor-dourado"></span>
+          <p class="frase-sobre">HERANÇA COM BRILHO ETERNO</p>
+        </div>
+      </div>
+
+      <img src="IMG/Isaque%20e%20Joel%20SingleD.jpeg" class="foto-principal" alt="Isaque e Joel trabalhando na bancada da oficina">
+      <div class="foto-detalhe">
+        <img src="IMG/criaçao%20diamantes%20SingleD.png" alt="Esboço a lápis de um anel com diamantes">
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 4ª dobra: Sobre Nós 3 -->
+  <section class="sobre sobre-3">
+    <div class="container-sobre">
+
+      <div class="texto-sobre">
+        <h2 class="titulo-sobre">sua história merece ser lapidada com excelência</h2>
+
+        <div class="rotulo">
+          <span class="linha-dourada"></span>
+          <p class="texto-rotulo">Single Diamonds</p>
+        </div>
+
+        <p class="paragrafo-sobre">Aqui a sua história é celebrada em ouro e diamantes, é mais do que criar peças de alto luxo, nossa missão é eternizar momentos. Unimos o brilho eterno dos diamantes naturais à força simbólica do ouro puro para dar forma a jóias únicas — criadas sob medida para marcar momentos inesquecíveis.</p>
+        <p class="paragrafo-sobre">Nascida em Patos de Minas com alma internacional, a Single Diamonds representa a fusão entre tradição joalheira e inovação em design. Cada criação é feita com rigor técnico, excelência nos acabamentos e uma curadoria de pedras preciosas que respeita os mais altos padrões de qualidade.</p>
+        <p class="paragrafo-sobre">Somos especialistas em transformar conquistas em símbolos eternos. Para homens e mulheres que sabem o valor do que constroem e querem expressar isso com elegância, exclusividade e autenticidade.</p>
+
+        <div class="frases-sobre">
+          <p class="frase-sobre">LUXO COM ESSÊNCIA NATURAL</p>
+          <span class="divisor-dourado"></span>
+          <p class="frase-sobre">HERANÇA COM BRILHO ETERNO</p>
+        </div>
+      </div>
+
+      <img src="IMG/WhatsApp-Image-2025-07-02-at-08.03.49.jpeg" class="foto-principal" alt="Caixa com alianças de ouro aberta diante da Torre Eiffel">
+      <div class="foto-detalhe">
+        <img src="IMG/casamento%20background%20SingleD.png" alt="Pedido de casamento em frente à Torre Eiffel">
       </div>
 
     </div>
