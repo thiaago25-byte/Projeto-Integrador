@@ -1,18 +1,14 @@
-/* Fontes: Julius Sans One e Jost (Light 300) carregadas via Google Fonts no index.html */
-
+/* Fontes carregadas via Google Fonts no index.html. */
 :root {
-  --font-julius: 'Julius Sans One', sans-serif;
-  --font-jost: 'Jost', sans-serif;
+  --font-heading: 'Julius Sans One', sans-serif;
+  --font-body: 'Jost', sans-serif;
 
-  --cor-dourado: #BA9568;
-  --cor-branco: #FFFFFF;
-  --cor-branco-principal: #F7F7F7;
-  --cor-fundo-escuro: #333333;
-
-  --largura-design: 1440px;
+  --color-gold: #BA9568;
+  --color-white: #FFFFFF;
+  --color-off-white: #F7F7F7;
+  --color-dark: #333333;
 }
 
-/* Reset */
 * {
   margin: 0;
   padding: 0;
@@ -20,55 +16,47 @@
 }
 
 body {
-  width: 100%;
-  min-height: 100vh;
   overflow-x: hidden;
+  color: var(--color-dark);
 }
 
 img {
   display: block;
 }
 
-/* ===== HERO (1440 × 1826: duas dobras de 913; no Figma, frame de 1440 × 1937) ===== */
-.hero {
-  background-color: var(--cor-branco);
-}
+/* ===== Hero ===== */
 
-/* ----- 1ª dobra (1440 × 913, mesmas dimensões da 2ª dobra) -----
-   Fica fixa (sticky) no topo enquanto a 2ª dobra sobe e a cobre. */
-.hero-dobra {
+/* 1ª dobra: 913px de altura, igual à 2ª (no Figma tem 1024).
+   Fica fixa no topo enquanto a seção "Sobre" sobe e a cobre. */
+.hero {
   position: sticky;
   top: 0;
-  z-index: 0;
   height: 913px;
   overflow: hidden;
 }
 
-/* Imagem cortada para 1440 × 913 sem distorção.
-   object-position 66.5% mantém o anel logo abaixo do título,
-   como no enquadramento original do Figma. */
-.hero-dobra__fundo {
+.hero__background,
+.hero__overlay-vertical,
+.hero__overlay-horizontal {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+}
+
+.hero__background {
   object-fit: cover;
-  object-position: center 66.5%;
+  object-position: center 66.5%; /* mantém o anel logo abaixo do título */
   mix-blend-mode: darken;
 }
 
-.hero-dobra__overlay-vertical,
-.hero-dobra__overlay-lateral {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+.hero__overlay-vertical,
+.hero__overlay-horizontal {
   mix-blend-mode: multiply;
 }
 
-.hero-dobra__overlay-lateral {
+.hero__overlay-horizontal {
   background-image: linear-gradient(
     90deg,
     rgba(51, 51, 51, 0.92) 0%,
@@ -78,129 +66,121 @@ img {
   );
 }
 
-/* Cabeçalho: menu em x 51 / logo em x 99, topo em y 50 */
-.cabecalho {
+/* ===== Cabeçalho ===== */
+
+/* Menu em x 51 e logo em x 99, topo em y 50 (margem diferente da do conteúdo, como no Figma). */
+.site-header {
   position: absolute;
   top: 50px;
   left: 51px;
   display: flex;
   align-items: center;
   gap: 28.4px;
-  height: 30px;
 }
 
-.cabecalho__menu {
+.site-header__menu {
   display: flex;
   flex-direction: column;
   gap: 4.375px;
-  width: 19.6px;
 }
 
-.cabecalho__menu span {
-  display: block;
+.site-header__menu span {
   width: 19.6px;
   height: 2.917px;
-  background-color: var(--cor-dourado);
+  background-color: var(--color-gold);
 }
 
-/* Logo 108 × 30 com o mesmo recorte da imagem no Figma */
-.cabecalho__logo {
+/* O logo é ampliado e recortado pela caixa para esconder as margens da imagem. */
+.site-header__logo {
   position: relative;
   width: 108px;
   height: 30px;
   overflow: hidden;
 }
 
-.cabecalho__logo img {
+.site-header__logo img {
   position: absolute;
   top: -29.41%;
   left: -3.28%;
   width: 106.56%;
   height: 152.94%;
-  max-width: none;
 }
 
-/* Título centralizado na dobra: 354 × 39 (centro vertical em y 456,5) */
-.hero-dobra__titulo {
+/* Centralizado na dobra (centro vertical em y 456,5). */
+.hero__title {
   position: absolute;
   top: 437px;
   left: 50%;
   transform: translateX(-50%);
-  font-family: var(--font-julius);
+  font-family: var(--font-heading);
   font-weight: 400;
   font-size: 36px;
-  line-height: normal;
-  color: var(--cor-branco);
+  color: var(--color-white);
   white-space: nowrap;
 }
 
-/* ----- 2ª dobra: Sobre Nós (1440 × 913) ----- */
-/* Fundo opaco e acima da 1ª dobra, para cobri-la ao rolar */
-.sobre {
+/* ===== Sobre ===== */
+
+/* Fundo opaco e acima da hero, para cobri-la ao rolar. */
+.about {
   position: relative;
   z-index: 1;
-  background-color: var(--cor-branco-principal);
+  background-color: var(--color-off-white);
 }
 
-.sobre__container {
+.about__container {
   position: relative;
-  max-width: var(--largura-design);
+  max-width: 1440px;
   height: 913px;
   margin: 0 auto;
   overflow: hidden;
 }
 
-/* Coluna de texto: x 102, largura 495 */
-.sobre__texto {
+.about__content {
   position: absolute;
   top: 132px;
   left: 102px;
   width: 495px;
 }
 
-.sobre__titulo {
+.about__title {
   width: 569px;
-  font-family: var(--font-julius);
+  font-family: var(--font-heading);
   font-weight: 400;
   font-size: 36px;
   line-height: 1.25;
   letter-spacing: 0.36px;
-  color: var(--cor-fundo-escuro);
 }
 
-.eyebrow {
+.section-label {
   display: flex;
   align-items: center;
   gap: 16px;
   margin-top: 40px;
 }
 
-.eyebrow__linha {
-  display: block;
+.section-label__line {
   width: 48px;
   height: 1px;
-  background-color: var(--cor-dourado);
+  background-color: var(--color-gold);
 }
 
-.eyebrow__texto {
-  font-family: var(--font-julius);
+.section-label__text {
+  font-family: var(--font-heading);
   font-size: 16px;
   line-height: 17px;
-  color: var(--cor-fundo-escuro);
-  white-space: nowrap;
 }
 
-.sobre__paragrafo {
+.about__text {
   margin-top: 16px;
-  font-family: var(--font-jost);
+  font-family: var(--font-body);
   font-weight: 300;
   font-size: 17px;
   line-height: 1.75;
-  color: var(--cor-fundo-escuro);
 }
 
-/* Frases centralizadas na coluna de texto (228px de largura) */
-.sobre__frases {
+/* Frases centralizadas na coluna de texto. */
+.about__taglines {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -208,25 +188,22 @@ img {
   margin: 48px auto 0;
 }
 
-.sobre__frase {
-  font-family: var(--font-julius);
+.about__tagline {
+  font-family: var(--font-heading);
   font-size: 12px;
   line-height: 13px;
   letter-spacing: 1.2px;
-  color: var(--cor-fundo-escuro);
   white-space: nowrap;
 }
 
-.sobre__sublinhado {
-  display: block;
-  width: 228px;
+.about__divider {
+  width: 100%;
   height: 1px;
   margin: 3px 0 4px;
-  background-color: var(--cor-dourado);
+  background-color: var(--color-gold);
 }
 
-/* Foto principal: 600 × 560 em x 740 / y 128 */
-.sobre__foto-principal {
+.about__photo-main {
   position: absolute;
   top: 128px;
   left: 740px;
@@ -235,29 +212,26 @@ img {
   object-fit: cover;
 }
 
-/* Foto de detalhe: 201 × 248, sobreposta à principal.
-   A imagem ocupa a caixa inteira (alinhada ao topo) e a borda branca
-   de 10px é desenhada por cima dela, para dentro.
+/* A borda branca é desenhada por cima da foto, para dentro.
    Difere do Figma, onde a borda fica por fora (ver CLAUDE.md). */
-.sobre__foto-detalhe {
+.about__photo-detail {
   position: absolute;
   top: 530px;
   left: 671px;
   width: 201px;
   height: 248px;
-  overflow: hidden;
 }
 
-.sobre__foto-detalhe img {
+.about__photo-detail img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: top;
 }
 
-.sobre__foto-detalhe::after {
+.about__photo-detail::after {
   content: "";
   position: absolute;
   inset: 0;
-  border: 10px solid var(--cor-branco);
+  border: 10px solid var(--color-white);
 }
