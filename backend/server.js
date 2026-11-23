@@ -37,6 +37,18 @@ app.get('/api/teste', async (req, res) => {
     }
 });
 
+
+
+app.post('/api/imagens', (req, res, next) => {
+    if (process.env.NODE_ENV === 'production') {
+        return res.status(403).json({
+            erro: 'Envio de imagens desativado'
+        });
+    }
+    next();
+});
+
+
 app.post('/api/imagens', upload.single('imagem'), async (req, res) => {
     try {
         if (!req.file) {
@@ -145,7 +157,11 @@ app.get('/:arquivo', (req, res, next) => {
 });
 
 
-app.listen(3001, '127.0.0.1', () => {
-    console.log('Servidor funcionando na porta 3001!');
+
+const PORT = process.env.PORT || 3001;
+
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Servidor funcionando na porta ${PORT}!`);
 });
+
 
