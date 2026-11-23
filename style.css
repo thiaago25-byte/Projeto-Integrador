@@ -5,6 +5,7 @@
   --color-gold: #BA9568;
   --color-white: #FFFFFF;
   --color-off-white: #F7F7F7;
+  --color-light-gray: #DDDDDD;
   --color-dark: #333333;
 }
 
@@ -25,7 +26,6 @@ img {
 
 /* ===== Cabeçalho ===== */
 
-/* Fica fixo na tela, por cima de todas as seções. */
 .cabecalho {
   position: fixed;
   top: 50px;
@@ -36,17 +36,21 @@ img {
   gap: 28.4px;
 }
 
+/* Botão do hambúrguer, sem o visual padrão de botão. */
 .menu {
   display: flex;
   flex-direction: column;
   gap: 5px; /* valores inteiros: com 2,917px o traço do meio ficava mais fino */
+  border: none;
+  background: none;
+  cursor: pointer;
 }
 
 .menu span {
   width: 19.6px;
   height: 3px;
   background-color: var(--color-gold);
-  transition: background-color 0.4s ease;
+  transition: background-color 0.4s;
 }
 
 .cabecalho.claro .menu span {
@@ -68,7 +72,7 @@ img {
   left: -3.28%;
   width: 106.56%;
   height: 152.94%;
-  transition: opacity 0.4s ease;
+  transition: opacity 0.4s;
 }
 
 .logo-preta,
@@ -78,6 +82,72 @@ img {
 
 .cabecalho.claro .logo .logo-preta {
   opacity: 1;
+}
+
+/* ===== Menu de tela cheia ===== */
+
+/* Cobre a página, atrás do hambúrguer e da logo (z-index -1 dentro do cabeçalho). */
+.navegacao {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 36px;
+  background-color: #000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s, visibility 0s 0.5s;
+}
+
+.navegacao a {
+  font-family: var(--font-heading);
+  font-size: 36px;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--color-gold);
+  opacity: 0;
+  transform: translateY(16px);
+  transition: color 0.3s, opacity 0.3s, transform 0.3s;
+}
+
+.navegacao a:hover,
+.navegacao a:focus-visible {
+  color: var(--color-white);
+}
+
+.cabecalho.aberto .navegacao {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.6s;
+}
+
+.cabecalho.aberto .navegacao a {
+  opacity: 1;
+  transform: translateY(0);
+  transition: color 0.3s, opacity 0.7s, transform 0.7s cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+
+/* Atraso só na entrada (opacidade e subida), uma opção após a outra; a cor do hover não espera. */
+.cabecalho.aberto .navegacao a:nth-child(1) { transition-delay: 0s, 0.2s, 0.2s; }
+.cabecalho.aberto .navegacao a:nth-child(2) { transition-delay: 0s, 0.28s, 0.28s; }
+.cabecalho.aberto .navegacao a:nth-child(3) { transition-delay: 0s, 0.36s, 0.36s; }
+.cabecalho.aberto .navegacao a:nth-child(4) { transition-delay: 0s, 0.44s, 0.44s; }
+
+/* Com o menu aberto (fundo preto), hambúrguer e logo voltam às cores da hero. */
+.cabecalho.aberto .menu span {
+  background-color: var(--color-gold);
+}
+
+.cabecalho.aberto .logo img {
+  opacity: 1;
+}
+
+.cabecalho.aberto .logo .logo-preta {
+  opacity: 0;
 }
 
 /* ===== Hero ===== */
@@ -130,7 +200,7 @@ img {
   );
 }
 
-/* Centralizado na dobra (centro vertical em y 456,5). */
+/* Centralizado na dobra. */
 .titulo-hero {
   position: absolute;
   top: 437px;
@@ -145,7 +215,7 @@ img {
 
 /* ===== Sobre ===== */
 
-/* Bloco com as três seções "Sobre", usado na transição (animacao.js). */
+/* Bloco com as três seções "Sobre", usado na transição (hero.js). */
 .sequencia-sobre {
   position: relative;
 }
@@ -207,8 +277,7 @@ img {
   line-height: 1.75;
 }
 
-/* Botão para o Portfólio (hover "button--pan" do Codrops, invertido):
-   o dourado sobe e o texto clareia. */
+/* Botão para o Portfólio: no hover o dourado sobe e o texto clareia (ideia do Codrops). */
 .cta-sobre {
   position: relative;
   isolation: isolate; /* mantém o preenchimento (::before) atrás do texto */
@@ -284,7 +353,7 @@ img {
   border: 10px solid var(--color-white);
 }
 
-/* ===== Sobre Nós 2 e 3: mesmas posições da 1ª; só mudam os recortes das fotos ===== */
+/* ===== Sobre Nós 3: recorte das fotos ===== */
 
 .sobre-3 .foto-principal {
   object-position: center 37%; /* enquadramento mais próximo do Figma, sem esticar a foto */
@@ -292,4 +361,157 @@ img {
 
 .sobre-3 .foto-detalhe img {
   object-position: center 81%;
+}
+
+/* ===== Portfólio ===== */
+
+/* Três coleções por vez, na altura da tela (as bolinhas ficam sempre visíveis). */
+.portfolio {
+  position: relative;
+  height: 100vh;
+  overflow: clip; /* como hidden, mas o Tab não rola a seção por dentro */
+  background-color: #000;
+  user-select: none; /* para arrastar sem selecionar texto */
+  touch-action: pan-y; /* no toque, o gesto horizontal fica para o carrossel */
+}
+
+.trilha {
+  display: flex;
+  height: 100%;
+}
+
+.colecao {
+  position: relative;
+  flex: 0 0 calc(100% / 3);
+  overflow: hidden;
+}
+
+.foto-colecao {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.texto-colecao {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px 60px 80px;
+  line-height: 33.2px; /* entrelinha do texto no site oficial (o subtítulo herda) */
+  color: var(--color-white);
+  text-decoration: none;
+}
+
+.titulo-colecao {
+  position: relative;
+  width: fit-content;
+  margin-bottom: 20px;
+  font-family: var(--font-heading);
+  font-weight: 400;
+  font-size: 36px;
+  line-height: 1.3;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-shadow: 3px 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Subtítulo com o traço dourado à direita. */
+.subtitulo-colecao {
+  position: relative;
+  display: inline-block;
+  padding-right: 55px;
+  font-family: var(--font-heading);
+  font-size: 11px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--color-light-gray);
+}
+
+.subtitulo-colecao::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 40px;
+  height: 1px;
+  margin-top: -1px;
+  background-color: var(--color-gold);
+  transition: opacity 0s 0.5s;
+}
+
+/* Revelação do texto: um bloco dourado cobre o texto e sai pela direita.
+   O JS troca .oculto por .revelado. */
+.titulo-colecao::before,
+.subtitulo-colecao::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: scaleX(0);
+}
+
+.titulo-colecao::before {
+  background-color: var(--color-gold);
+}
+
+.subtitulo-colecao::before {
+  background-color: #8C6F4A; /* tom mais escuro, como as variações do original */
+}
+
+.portfolio.revelado .titulo-colecao::before,
+.portfolio.revelado .subtitulo-colecao::before {
+  animation: cobrir-e-descobrir 1s cubic-bezier(0.86, 0, 0.07, 1); /* 0,5s para cobrir e 0,5s para descobrir */
+}
+
+@keyframes cobrir-e-descobrir {
+  0%    { transform: scaleX(0); transform-origin: left; }
+  50%   { transform: scaleX(1); transform-origin: left; }
+  50.1% { transform: scaleX(1); transform-origin: right; }
+  100%  { transform: scaleX(0); transform-origin: right; }
+}
+
+/* O texto aparece na metade da animação, quando o bloco já o cobre. */
+.titulo-colecao,
+.subtitulo-colecao {
+  transition: color 0s 0.5s, text-shadow 0s 0.5s;
+}
+
+.portfolio.oculto .titulo-colecao,
+.portfolio.oculto .subtitulo-colecao {
+  color: transparent;
+  text-shadow: none;
+}
+
+.portfolio.oculto .subtitulo-colecao::after {
+  opacity: 0;
+}
+
+/* Bolinhas de navegação (a coleção mais à esquerda fica marcada). */
+.bolinhas {
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+}
+
+.bolinha {
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--color-white);
+  border-radius: 50%;
+  background: none;
+  opacity: 0.45;
+  cursor: pointer;
+  transition: background-color 0.2s, opacity 0.2s;
+}
+
+.bolinha:hover,
+.bolinha.ativa {
+  background-color: var(--color-white);
+}
+
+.bolinha.ativa {
+  opacity: 1;
 }

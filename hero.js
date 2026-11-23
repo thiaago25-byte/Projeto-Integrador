@@ -2,7 +2,7 @@
 // Cada unidade da linha do tempo corresponde a uma tela de rolagem.
 gsap.registerPlugin(ScrollTrigger, CustomEase);
 
-// Curva do demo do Codrops (async-page-transitions): começa devagar, acelera e assenta suave.
+// Curva do Codrops: começa devagar, acelera e assenta suave.
 const easeTransicao = CustomEase.create('transicao', 'M0,0 C0.38,0.05 0.48,0.58 0.65,0.82 0.82,1 1,1 1,1');
 
 const sequencia = document.querySelector('.sequencia-sobre');
@@ -21,7 +21,7 @@ const tl = gsap.timeline({
   scrollTrigger: {
     trigger: sequencia,
     start: 'top top',
-    end: '+=550%',  // 5,5 unidades da linha do tempo = 5,5 telas de rolagem
+    end: '+=550%',  // 5,5 telas de rolagem
     pin: true,
     scrub: 0.7,     // segue a rolagem com 0,7s de suavização
   },
@@ -56,8 +56,22 @@ secoes.slice(1).forEach((nova, i) => {
 
 tl.to({}, { duration: 0.5 }); // meia tela parada na última seção
 
-// Cabeçalho fixo: muda para a versão escura quando o fundo claro passa por baixo dele (y 65).
+// Cabeçalho fixo: fica escuro enquanto as seções "Sobre" (fundo claro) estão por baixo dele (y 65).
 const cabecalho = document.querySelector('.cabecalho');
-tl.eventCallback('onUpdate', () => {
-  cabecalho.classList.toggle('claro', sequencia.getBoundingClientRect().top <= 65);
-});
+function atualizarCabecalho() {
+  const { top, bottom } = sequencia.getBoundingClientRect();
+  cabecalho.classList.toggle('claro', top <= 65 && bottom > 65);
+}
+tl.eventCallback('onUpdate', atualizarCabecalho);
+
+// "Sobre Nós" do menu: rola até a seção cobrir a hero (o bloco começa embaixo dela).
+function irParaSobre() {
+  const { start, end } = tl.scrollTrigger;
+  window.scrollTo(0, start + (end - start) / tl.duration()); // 1ª transição = 1 unidade
+}
+document.querySelectorAll('a[href$="#sobre-nos"]').forEach((link) => link.addEventListener('click', (e) => {
+  e.preventDefault();
+  irParaSobre();
+}));
+if (location.hash === '#sobre-nos') window.addEventListener('load', irParaSobre); // vindo de outra página
+

@@ -124,10 +124,24 @@ app.get('/IMG/:nome', async (req, res) => {
 });
 
 // Abrir o site pelo servidor Node.js
-app.use(express.static(path.join(__dirname, '..')));
+// Só os arquivos públicos do site são servidos (nada de .env, CLAUDE.md, .claude ou backend)
+const raiz = path.join(__dirname, '..');
+const arquivosPublicos = [
+    'index.html',
+    'portfolio.html',
+    'style.css',
+    'menu.js',
+    'hero.js',
+    'portfolio.js'
+];
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'index.html'));
+    res.sendFile(path.join(raiz, 'index.html'));
+});
+
+app.get('/:arquivo', (req, res, next) => {
+    if (!arquivosPublicos.includes(req.params.arquivo)) return next();
+    res.sendFile(path.join(raiz, req.params.arquivo));
 });
 
 
