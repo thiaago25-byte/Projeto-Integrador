@@ -1,4 +1,3 @@
-
 require('dotenv').config();
 
 const fs = require('fs/promises');
@@ -6,17 +5,21 @@ const path = require('path');
 const { Pool } = require('pg');
 
 
+// SSL: ligado no Neon (host de fora) ou com PGSSLMODE=require; desligado no PostgreSQL local do Docker.
+const local = ['127.0.0.1', 'localhost'].includes(process.env.PGHOST);
+const usarSsl = process.env.PGSSLMODE === 'require' || !local;
+
 const banco = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: usarSsl,
   host: process.env.PGHOST,
   port: Number(process.env.PGPORT),
   database: process.env.PGDATABASE,
   user: process.env.PGUSER,
-  password: process.env.PGPASSWORD,
-  ssl: { rejectUnauthorized: true }
+  password: process.env.PGPASSWORD
 });
 
-
-const pasta = path.join(__dirname, '..', 'IMG');
+const raiz = path.join(__dirname, '..');
 
 const tipos = {
   '.jpg': 'image/jpeg',
@@ -27,35 +30,54 @@ const tipos = {
   '.svg': 'image/svg+xml'
 };
 
+let salvas = 0;
+let existentes = 0;
+
+// Salva as imagens de uma pasta. "prefixo" é o começo do nome guardado no banco:
+// '' para a pasta IMG (nome só do arquivo, como sempre foi) e 'IMG Menus/Magnata/' para as coleções.
+async function importarPasta(pasta, prefixo) {
+  const arquivos = await fs.readdir(pasta);
+
+  for (const arquivo of arquivos) {
+    const tipo = tipos[path.extname(arquivo).toLowerCase()];
+    if (!tipo) continue;
+
+    const nome = prefixo + arquivo;
+
+    const existe = await banco.query(
+      'SELECT id FROM imagens WHERE nome = $1 LIMIT 1',
+      [nome]
+    );
+
+    if (existe.rows.length > 0) {
+      existentes++;
+      continue;
+    }
+
+    const imagem = await fs.readFile(path.join(pasta, arquivo));
+
+    await banco.query(
+      'INSERT INTO imagens (nome, tipo_arquivo, imagem) VALUES ($1, $2, $3)',
+      [nome, tipo, imagem]
+    );
+
+    console.log('Salva:', nome);
+    salvas++;
+  }
+}
+
 async function importar() {
   try {
-    const arquivos = await fs.readdir(pasta);
-    let salvas = 0;
-    let existentes = 0;
+    await importarPasta(path.join(raiz, 'IMG'), '');
 
-    for (const nome of arquivos) {
-      const tipo = tipos[path.extname(nome).toLowerCase()];
-      if (!tipo) continue;
-
-      const existe = await banco.query(
-        'SELECT id FROM imagens WHERE nome = $1 LIMIT 1',
-        [nome]
+    // Uma subpasta por coleção dentro de IMG Menus
+    const colecoes = await fs.readdir(path.join(raiz, 'IMG Menus'), { withFileTypes: true });
+    for (const colecao of colecoes) {
+      if (!colecao.isDirectory()) continue;
+      await importarPasta(
+        path.join(raiz, 'IMG Menus', colecao.name),
+        `IMG Menus/${colecao.name}/`
       );
-
-      if (existe.rows.length > 0) {
-        existentes++;
-        continue;
-      }
-
-      const imagem = await fs.readFile(path.join(pasta, nome));
-
-      await banco.query(
-        'INSERT INTO imagens (nome, tipo_arquivo, imagem) VALUES ($1, $2, $3)',
-        [nome, tipo, imagem]
-      );
-
-      console.log('Salva:', nome);
-      salvas++;
     }
 
     console.log('Importação concluída!');

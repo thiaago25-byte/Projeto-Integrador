@@ -8,7 +8,14 @@ const path = require('path');
 
 const app = express();
 
+// SSL: ligado no Neon (host de fora) ou com PGSSLMODE=require; desligado no PostgreSQL local do Docker.
+const local = ['127.0.0.1', 'localhost'].includes(process.env.PGHOST);
+const usarSsl = process.env.PGSSLMODE === 'require' || !local;
+
+// Local: variáveis PG* do .env. No Render/Neon: DATABASE_URL e/ou PGSSLMODE=require (o Neon exige SSL).
 const banco = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: usarSsl,
     host: process.env.PGHOST,
     port: Number(process.env.PGPORT),
     database: process.env.PGDATABASE,
@@ -37,19 +44,17 @@ app.get('/api/teste', async (req, res) => {
     }
 });
 
-
-
-app.post('/api/imagens', (req, res, next) => {
-    if (process.env.NODE_ENV === 'production') {
-        return res.status(403).json({
-            erro: 'Envio de imagens desativado'
-        });
+// O upload fica desligado por padrão (o site publicado não pode receber arquivos de qualquer pessoa).
+// Para usar localmente, coloque PERMITIR_UPLOAD=sim no .env. O importar.js não passa por aqui.
+// Em produção (NODE_ENV=production) ele continua bloqueado mesmo com PERMITIR_UPLOAD.
+function uploadLiberado(req, res, next) {
+    if (process.env.NODE_ENV === 'production' || process.env.PERMITIR_UPLOAD !== 'sim') {
+        return res.status(403).json({ erro: 'Envio de imagens desativado' });
     }
     next();
-});
+}
 
-
-app.post('/api/imagens', upload.single('imagem'), async (req, res) => {
+app.post('/api/imagens', uploadLiberado, upload.single('imagem'), async (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).json({ erro: 'Envie uma imagem' });
@@ -113,11 +118,12 @@ app.use((erro, req, res, next) => {
 });
 
 
-app.get('/IMG/:nome', async (req, res) => {
+// Envia uma imagem do banco. O cache evita consultar o banco a cada visita.
+async function enviarImagem(res, nome) {
     try {
         const resultado = await banco.query(
             'SELECT imagem, tipo_arquivo FROM imagens WHERE nome = $1 LIMIT 1',
-            [req.params.nome]
+            [nome]
         );
 
         if (resultado.rows.length === 0) {
@@ -127,12 +133,24 @@ app.get('/IMG/:nome', async (req, res) => {
         const foto = resultado.rows[0];
 
         res.set('Content-Type', foto.tipo_arquivo);
+        res.set('Cache-Control', 'public, max-age=86400');
         res.send(foto.imagem);
 
     } catch (erro) {
         console.error(erro);
         res.status(500).send('Erro ao carregar imagem');
     }
+}
+
+// Imagens antigas: o nome é só o do arquivo (ex.: /IMG/logo-SingleD.png)
+app.get('/IMG/:nome', (req, res) => {
+    enviarImagem(res, req.params.nome);
+});
+
+// Imagens das coleções: o nome no banco é o caminho (ex.: IMG Menus/Magnata/6FA0380.jpg)
+app.get('/:pasta/:colecao/:nome', (req, res, next) => {
+    if (req.params.pasta !== 'IMG Menus') return next();
+    enviarImagem(res, `IMG Menus/${req.params.colecao}/${req.params.nome}`);
 });
 
 // Abrir o site pelo servidor Node.js
@@ -144,7 +162,13 @@ const arquivosPublicos = [
     'style.css',
     'menu.js',
     'hero.js',
-    'portfolio.js'
+    'portfolio.js',
+    'colecao.js',
+    'magnata.html',
+    'alta-joalheria.html',
+    'mimos-para-animais.html',
+    'noivado-e-casamento.html',
+    'diamantes-naturais.html'
 ];
 
 app.get('/', (req, res) => {
@@ -157,10 +181,12 @@ app.get('/:arquivo', (req, res, next) => {
 });
 
 
-
+// No Render a porta vem de PORT e o servidor precisa aceitar conexões de fora (0.0.0.0).
+// Local: porta 3001, só neste computador.
 const PORT = process.env.PORT || 3001;
+const host = process.env.PORT ? '0.0.0.0' : '127.0.0.1';
 
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, host, () => {
     console.log(`Servidor funcionando na porta ${PORT}!`);
 });
 
