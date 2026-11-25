@@ -32,10 +32,29 @@ const tipos = {
 
 let salvas = 0;
 let existentes = 0;
+let ignoradas = 0;
+
+// Lê as páginas do site e junta os caminhos de imagem que elas usam
+// (ex.: IMG/logo-SingleD.png e IMG%20Menus/Magnata/6FA0380.jpg).
+async function imagensUsadas() {
+  const usadas = new Set();
+  const arquivos = await fs.readdir(raiz);
+
+  for (const arquivo of arquivos) {
+    if (!['.html', '.css', '.js'].includes(path.extname(arquivo))) continue;
+
+    const texto = await fs.readFile(path.join(raiz, arquivo), 'utf-8');
+    for (const [caminho] of texto.matchAll(/IMG(?:%20| )Menus\/[^"'()]+|IMG\/[^"'()]+/g)) {
+      usadas.add(decodeURIComponent(caminho));
+    }
+  }
+
+  return usadas;
+}
 
 // Salva as imagens de uma pasta. "prefixo" é o começo do nome guardado no banco:
 // '' para a pasta IMG (nome só do arquivo, como sempre foi) e 'IMG Menus/Magnata/' para as coleções.
-async function importarPasta(pasta, prefixo) {
+async function importarPasta(pasta, prefixo, usadas) {
   const arquivos = await fs.readdir(pasta);
 
   for (const arquivo of arquivos) {
@@ -43,6 +62,13 @@ async function importarPasta(pasta, prefixo) {
     if (!tipo) continue;
 
     const nome = prefixo + arquivo;
+
+    // Arquivos que nenhuma página usa continuam nas pastas, mas não vão para o banco
+    const caminho = prefixo ? nome : 'IMG/' + nome;
+    if (!usadas.has(caminho)) {
+      ignoradas++;
+      continue;
+    }
 
     const existe = await banco.query(
       'SELECT id FROM imagens WHERE nome = $1 LIMIT 1',
@@ -68,7 +94,9 @@ async function importarPasta(pasta, prefixo) {
 
 async function importar() {
   try {
-    await importarPasta(path.join(raiz, 'IMG'), '');
+    const usadas = await imagensUsadas();
+
+    await importarPasta(path.join(raiz, 'IMG'), '', usadas);
 
     // Uma subpasta por coleção dentro de IMG Menus
     const colecoes = await fs.readdir(path.join(raiz, 'IMG Menus'), { withFileTypes: true });
@@ -76,13 +104,15 @@ async function importar() {
       if (!colecao.isDirectory()) continue;
       await importarPasta(
         path.join(raiz, 'IMG Menus', colecao.name),
-        `IMG Menus/${colecao.name}/`
+        `IMG Menus/${colecao.name}/`,
+        usadas
       );
     }
 
     console.log('Importação concluída!');
     console.log('Novas imagens:', salvas);
     console.log('Já existentes:', existentes);
+    console.log('Ignoradas (não usadas pelo site):', ignoradas);
 
   } catch (erro) {
     console.error('Erro:', erro.message);
